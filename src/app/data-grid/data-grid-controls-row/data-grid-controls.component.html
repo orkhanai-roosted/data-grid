@@ -1,0 +1,41 @@
+<mat-form-field
+  appearance="outline"
+  subscriptSizing="dynamic">
+  <mat-label>Group By:</mat-label>
+  <mat-select
+    [value]="groupBy"
+    (selectionChange)="groupDataBy($event)">
+    <mat-option
+      *ngFor="let groupOption of groupOptions | keyvalue"
+      [value]="groupOption.key">
+      {{ groupOption.value.title }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<div class="dg-sort-list">
+  <ng-container *ngIf="sortBy && sortBy.length">
+    <div
+      *ngFor="let sortCol of sortBy; let i = index"
+      class="dg-sort-item"
+      (click)="toggleSortingDirection(i)">
+      <span>{{ sortCol.title }}</span>
+
+      <div class="dg-sort-indicator">
+        <fa-icon [icon]="sortCol.sortOrder === 'DESC' ? faArrowDown : faArrowUp"></fa-icon>
+      </div>
+
+      <div
+        class="dg-sort-remove"
+        (click)="removeSorting(i, sortCol)">
+        <fa-icon [icon]="faXMark"></fa-icon>
+      </div>
+    </div>
+  </ng-container>
+
+  <span
+    *ngIf="!sortBy || !sortBy.length"
+    class="dg-sort-list-no-sort">
+    Click on sortable column header below to add sorting
+  </span>
+</div>

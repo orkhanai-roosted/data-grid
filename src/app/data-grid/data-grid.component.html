@@ -1,0 +1,31 @@
+<app-data-grid-controls
+  [groupBy]="groupBy"
+  (groupBySelected)="groupData($event)"
+  [sortBy]="sortBy"
+  (sortUpdated)="sortData($event)"></app-data-grid-controls>
+
+<div class="dg-content">
+  <div class="dg-rows">
+    <app-data-grid-header-row
+      [columns]="columns"
+      [allRowsExpanded]="allRowsExpanded"
+      (toggledAllRows)="toggleAllRows()"
+      (sortColumnAdded)="addSortColumn($event)"></app-data-grid-header-row>
+
+    <app-data-grid-grouped-row
+      *ngFor="let data of groupedData | keyvalue"
+      [groupTitle]="data.key"
+      [groupData]="data.value"
+      [columns]="columns"
+      [sticky]="stickyGroupRows"
+      [allRowsExpanded]="allRowsExpanded"></app-data-grid-grouped-row>
+  </div>
+
+  <div
+    *ngIf="loading"
+    class="dg-loading-overlay">
+    <mat-spinner
+      diameter="50"
+      strokeWidth="4"></mat-spinner>
+  </div>
+</div>

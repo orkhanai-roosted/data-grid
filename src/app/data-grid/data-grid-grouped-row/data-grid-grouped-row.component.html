@@ -1,0 +1,58 @@
+<div
+  class="dg-row-group"
+  role="rowgroup">
+  <div
+    class="dg-group-header"
+    [class.sticky]="sticky"
+    role="row">
+    <div
+      class="dg-row-indentation dg-cell"
+      [class.expanded]="groupData.expanded"
+      role="cell"
+      (click)="toggleRow()">
+      <fa-icon [icon]="faAngleRight"></fa-icon>
+    </div>
+
+    <div
+      class="dg-group-header-title dg-cell"
+      role="cell">
+      <span>{{ groupTitle }}</span>
+      <span class="dg-group-header-rows-count">{{ groupData.items.length }}</span>
+    </div>
+  </div>
+
+  <ng-container *ngIf="groupData.expanded">
+    <div
+      *ngFor="let data of groupData.items"
+      class="dg-row"
+      role="row">
+      <div
+        class="dg-row-indentation dg-row-actions"
+        role="cell">
+        <button
+          mat-button
+          matTooltip="Confirm"
+          class="text-success">
+          <fa-icon [icon]="faCheck"></fa-icon>
+        </button>
+
+        <button
+          mat-button
+          matTooltip="Reject"
+          class="text-danger">
+          <fa-icon [icon]="faXmark"></fa-icon>
+        </button>
+      </div>
+
+      <div class="dg-display-container">
+        <div
+          *ngFor="let column of columns"
+          class="dg-cell no-border"
+          [style.width.px]="column.width"
+          role="cell">
+          {{ data[column.displayField || column.field] }}
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

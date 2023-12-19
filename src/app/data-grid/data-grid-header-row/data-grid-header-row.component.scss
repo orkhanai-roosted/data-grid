@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  font-weight: bold;
+}
+
+.dg-row {
+  background-color: #f5f5f5;
+}
+
+.dg-row-indentation {
+  box-shadow: 2px -2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.dg-column-header {
+  grid-template-columns: 1fr auto;
+
+  &.sortable {
+    cursor: pointer;
+
+    &:hover {
+      color: var(--dg-cell-hover-color);
+      background-color: var(--dg-cell-hover-bg);
+    }
+  }
+}
+
+.dg-sortable-icon {
+  color: #999;
+}

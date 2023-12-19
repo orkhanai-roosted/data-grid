@@ -1,1 +1,175 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$data-grid-primary: mat.define-palette(mat.$indigo-palette);
+$data-grid-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$data-grid-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$data-grid-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $data-grid-primary,
+      accent: $data-grid-accent,
+      warn: $data-grid-warn,
+    ),
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($data-grid-theme);
+
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --dg-bg: #f5f5f5;
+  --dg-border-color: #ddd;
+  --dg-cell-bg: #f9f9f9;
+  --dg-cell-hover-bg: #efefef;
+  --dg-cell-hover-color: #0088ff;
+  --dg-row-count-bg: #7f7f7f;
+
+  --dg-sort-item-bg: #dedede;
+  --dg-sort-item-hover-bg: #ccc;
+  --dg-sort-remove-bg: #666;
+
+  --dg-indentation-width: 200px;
+  --dg-cell-height: 50px;
+
+  --clr-success: #4a9b22;
+  --clr-danger: #e23636;
+}
+
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color: #333;
+  font-family: 'Open Sans', sans-serif !important;
+}
+
+.dg-row {
+  display: flex;
+  border-bottom: 1px solid var(--dg-border-color);
+}
+
+.dg-row-indentation {
+  position: sticky;
+  left: 0;
+  flex: 0 0 var(--dg-indentation-width);
+  min-width: var(--dg-indentation-width);
+  background-color: #fff;
+  border-right: 1px solid var(--dg-border-color);
+  text-align: center;
+
+  &:not(:empty, .dg-row-actions) {
+    background-color: var(--dg-cell-bg);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--dg-cell-hover-color);
+      background-color: var(--dg-cell-hover-bg);
+    }
+  }
+
+  &.expanded {
+    fa-icon {
+      transform: rotate(90deg);
+    }
+  }
+
+  fa-icon {
+    transition: transform 0.2s;
+    will-change: transform;
+  }
+}
+
+.dg-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.dg-display-container {
+  display: flex;
+}
+
+.dg-cell {
+  display: grid;
+  height: var(--dg-cell-height);
+  padding: 0 1rem;
+  place-items: center;
+  text-align: center;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:not(:last-child, .no-border) {
+    border-right: 1px solid var(--dg-border-color);
+  }
+}
+
+.dg-group-header {
+  display: flex;
+  background-color: var(--dg-cell-bg);
+  border-bottom: 1px solid var(--dg-border-color);
+  z-index: 97;
+
+  .dg-row-indentation {
+    border: none !important;
+  }
+
+  &-title {
+    display: flex;
+    gap: 0.75rem;
+    border: none !important;
+    position: sticky;
+    left: var(--dg-indentation-width);
+    user-select: none;
+  }
+
+  &.sticky {
+    position: sticky;
+    top: calc(var(--dg-cell-height) + 1px); // + border width
+  }
+}
+
+.dg-group-header-rows-count {
+  display: block;
+  padding: 0.125rem 0.4rem;
+  background-color: var(--dg-row-count-bg);
+  border-radius: 0.65rem;
+  color: #fff;
+}
+
+.text-success {
+  color: var(--clr-success) !important;
+}
+
+.text-danger {
+  color: var(--clr-danger) !important;
+}

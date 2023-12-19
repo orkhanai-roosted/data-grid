@@ -1,0 +1,35 @@
+<div
+  class="dg-row-group"
+  role="rowgroup">
+  <div
+    class="dg-row"
+    role="row">
+    <div
+      class="dg-row-indentation dg-cell"
+      role="cell"
+      (click)="toggleAllRows()">
+      <fa-icon
+        [icon]="allRowsExpanded ? faArrowsToLine : faArrowsFromLine"
+        size="lg"></fa-icon>
+    </div>
+
+    <div class="dg-display-container">
+      <div
+        *ngFor="let column of columns"
+        class="dg-cell dg-column-header"
+        [class.sortable]="column.sortable"
+        [style.width.px]="column.width"
+        (click)="column.sortable ? addSorting(column) : null"
+        role="cell">
+        <span>{{ column.title }}</span>
+        <span
+          *ngIf="column.sortable"
+          class="dg-sortable-icon">
+          <fa-icon
+            [icon]="faArrowUpArrowDown"
+            size="sm"></fa-icon>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
