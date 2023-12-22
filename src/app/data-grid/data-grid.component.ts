@@ -1,5 +1,5 @@
 import { KeyValuePipe } from '@angular/common';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
@@ -14,7 +14,7 @@ type GroupedData<T> = Record<string, DataGridGroup<T>>;
   selector: 'app-data-grid',
   templateUrl: './data-grid.component.html',
   styleUrl: './data-grid.component.scss',
-  providers: [KeyValuePipe],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DataGridComponent<T> implements OnInit, OnChanges {
   @Input() data: T[];

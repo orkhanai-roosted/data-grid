@@ -1,47 +1,49 @@
-<app-data-grid-controls
-  [groupBy]="groupBy"
-  (groupBySelected)="groupData($event)"
-  [sortBy]="sortBy"
-  (sortUpdated)="sortData($event)"></app-data-grid-controls>
-
-<div
-  class="dg-content"
-  cdkVirtualScrollingElement>
-  <div class="dg-rows">
-    <app-data-grid-header-row
-      [columns]="columns"
-      [allRowsExpanded]="allRowsExpanded"
-      (toggledAllRows)="toggleAllRows()"
-      (sortColumnAdded)="addSortColumn($event)"
-      [groupingActive]="!!groupBy"></app-data-grid-header-row>
-
-    <ng-container *ngIf="groupBy">
-      <app-data-grid-grouped-row
-        *ngFor="let data of groupedData | keyvalue : keyValueNoOrder"
-        [groupTitle]="data.key"
-        [groupData]="data.value"
-        [columns]="columns"
-        [sticky]="stickyGroupRows"
-        [rowActions]="rowActions"
-        [allRowsExpanded]="allRowsExpanded"></app-data-grid-grouped-row>
-    </ng-container>
-
-    <ng-container *ngIf="!groupBy">
-      <cdk-virtual-scroll-viewport itemSize="30">
-        <app-data-grid-row
-          *cdkVirtualFor="let rowData of simpleData$"
-          [rowData]="rowData"
-          [columns]="columns"
-          [rowActions]="rowActions"></app-data-grid-row>
-      </cdk-virtual-scroll-viewport>
-    </ng-container>
-  </div>
+<div class="dg-wrapper">
+  <app-data-grid-controls
+    [groupBy]="groupBy"
+    (groupBySelected)="groupData($event)"
+    [sortBy]="sortBy"
+    (sortUpdated)="sortData($event)"></app-data-grid-controls>
 
   <div
-    *ngIf="loading"
-    class="dg-loading-overlay">
-    <mat-spinner
-      diameter="50"
-      strokeWidth="4"></mat-spinner>
+    class="dg-content"
+    cdkVirtualScrollingElement>
+    <div class="dg-rows">
+      <app-data-grid-header-row
+        [columns]="columns"
+        [allRowsExpanded]="allRowsExpanded"
+        (toggledAllRows)="toggleAllRows()"
+        (sortColumnAdded)="addSortColumn($event)"
+        [groupingActive]="!!groupBy"></app-data-grid-header-row>
+
+      <ng-container *ngIf="groupBy">
+        <app-data-grid-grouped-row
+          *ngFor="let data of groupedData | keyvalue : keyValueNoOrder"
+          [groupTitle]="data.key"
+          [groupData]="data.value"
+          [columns]="columns"
+          [sticky]="stickyGroupRows"
+          [rowActions]="rowActions"
+          [allRowsExpanded]="allRowsExpanded"></app-data-grid-grouped-row>
+      </ng-container>
+
+      <ng-container *ngIf="!groupBy">
+        <cdk-virtual-scroll-viewport itemSize="30">
+          <app-data-grid-row
+            *cdkVirtualFor="let rowData of simpleData$"
+            [rowData]="rowData"
+            [columns]="columns"
+            [rowActions]="rowActions"></app-data-grid-row>
+        </cdk-virtual-scroll-viewport>
+      </ng-container>
+    </div>
+
+    <div
+      *ngIf="loading"
+      class="dg-loading-overlay">
+      <mat-spinner
+        diameter="50"
+        strokeWidth="4"></mat-spinner>
+    </div>
   </div>
 </div>

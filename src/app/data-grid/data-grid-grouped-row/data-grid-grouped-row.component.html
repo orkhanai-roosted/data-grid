@@ -27,8 +27,8 @@
 
   <ng-container *ngIf="groupData.expanded">
     <app-data-grid-row
-      *ngFor="let data of groupData.items"
-      [rowData]="data"
+      *ngFor="let rowData of groupData.items"
+      [rowData]="rowData"
       [rowActions]="rowActions"
       [columns]="columns"></app-data-grid-row>
   </ng-container>

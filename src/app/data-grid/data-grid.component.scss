@@ -1,4 +1,20 @@
-:host {
+:root {
+  --dg-bg: #f5f5f5;
+  --dg-border-color: #ddd;
+  --dg-cell-bg: #f9f9f9;
+  --dg-cell-hover-bg: #efefef;
+  --dg-cell-hover-color: #0088ff;
+  --dg-row-count-bg: #7f7f7f;
+
+  --dg-sort-item-bg: #dedede;
+  --dg-sort-item-hover-bg: #ccc;
+  --dg-sort-remove-bg: #666;
+
+  --dg-indentation-width: 200px;
+  --dg-cell-height: 50px;
+}
+
+.dg-wrapper {
   display: flex;
   flex-direction: column;
   height: 100dvh;
@@ -30,4 +46,66 @@
   inset: 0;
   background-color: rgba(255, 255, 255, 0.5);
   z-index: 98;
+}
+
+.dg-row {
+  display: flex;
+  border-bottom: 1px solid var(--dg-border-color);
+}
+
+.dg-row-indentation {
+  position: sticky;
+  left: 0;
+  flex: 0 0 var(--dg-indentation-width);
+  min-width: var(--dg-indentation-width);
+  background-color: #fff;
+  border-right: 1px solid var(--dg-border-color);
+  text-align: center;
+
+  &:not(:empty, .dg-row-actions) {
+    background-color: var(--dg-cell-bg);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--dg-cell-hover-color);
+      background-color: var(--dg-cell-hover-bg);
+    }
+  }
+
+  &.expanded {
+    fa-icon {
+      transform: rotate(90deg);
+    }
+  }
+
+  fa-icon {
+    transition: transform 0.2s;
+    will-change: transform;
+  }
+}
+
+.dg-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.dg-display-container {
+  display: flex;
+}
+
+.dg-cell {
+  display: grid;
+  height: var(--dg-cell-height);
+  padding: 0 1rem;
+  place-items: center;
+  text-align: center;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:not(:last-child, .no-border) {
+    border-right: 1px solid var(--dg-border-color);
+  }
 }
