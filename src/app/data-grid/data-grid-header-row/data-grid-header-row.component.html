@@ -7,8 +7,9 @@
     <div
       class="dg-row-indentation dg-cell"
       role="cell"
-      (click)="toggleAllRows()">
+      (click)="groupingActive ? toggleAllRows() : null">
       <fa-icon
+        *ngIf="groupingActive"
         [icon]="allRowsExpanded ? faArrowsToLine : faArrowsFromLine"
         size="lg"></fa-icon>
     </div>

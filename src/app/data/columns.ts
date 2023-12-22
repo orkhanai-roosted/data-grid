@@ -1,4 +1,4 @@
-import { DataGridColumn } from '../interfaces/data-grid.interface';
+import { DataGridColumn } from '../types/data-grid-column.type';
 
 export const COLUMNS: DataGridColumn[] = [
   {
@@ -9,7 +9,8 @@ export const COLUMNS: DataGridColumn[] = [
   },
   {
     title: 'Event',
-    field: 'event_name',
+    field: 'event_id',
+    displayField: 'event_name',
     width: 350,
     sortable: true,
   },
@@ -37,10 +38,12 @@ export const COLUMNS: DataGridColumn[] = [
     displayField: 'shift_date_display',
     width: 200,
     sortable: true,
+    isDate: true,
   },
   {
     title: 'Location',
-    field: 'location',
+    field: 'location_id',
+    displayField: 'location',
     width: 350,
     sortable: true,
   },

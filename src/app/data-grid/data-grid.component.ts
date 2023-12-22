@@ -1,41 +1,64 @@
+import { KeyValuePipe } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
-import { GROUP_BY_OPTIONS } from '../data/group-by-options';
-import { RequestGroupBy } from '../enums/request-group-by.enum';
-import { DataGridColumn } from '../interfaces/data-grid.interface';
-import { RequestItem } from '../interfaces/request-item.interface';
+import { BehaviorSubject } from 'rxjs';
 
-type GroupedData = Record<string, { expanded: boolean; items: RequestItem[] }>;
+import { DataGridColumn } from '../types/data-grid-column.type';
+import { DataGridGroupOption } from '../types/data-grid-group-option.type';
+import { DataGridRowAction } from '../types/data-grid-row-action.type';
+import { DataGridGroup } from '../types/data-grid-group.type';
+
+type GroupedData<T> = Record<string, DataGridGroup<T>>;
 
 @Component({
   selector: 'app-data-grid',
   templateUrl: './data-grid.component.html',
   styleUrl: './data-grid.component.scss',
+  providers: [KeyValuePipe],
 })
-export class DataGridComponent implements OnInit, OnChanges {
-  @Input() data: RequestItem[];
+export class DataGridComponent<T> implements OnInit, OnChanges {
+  @Input() data: T[];
   @Input() columns: DataGridColumn[];
   @Input() sortBy: DataGridColumn[] = [];
-  @Input() groupBy = RequestGroupBy.ShiftDate;
+  @Input() groupBy: DataGridGroupOption;
   @Input() stickyGroupRows = false;
+  @Input() rowActions: DataGridRowAction<T>[];
 
   allRowsExpanded = false;
   loading = false;
 
-  groupedData: GroupedData = {};
+  // Using subject & observable for virtual scroll cdk
+  simpleDataSubject = new BehaviorSubject<T[]>([]);
+  simpleData$ = this.simpleDataSubject.asObservable();
+
+  set simpleData(data: T[]) {
+    this.simpleDataSubject.next(data);
+  }
+  get simpleData(): T[] {
+    return this.simpleDataSubject.value;
+  }
+
+  groupedData: GroupedData<T> = {};
+
+  // KeyValuePipe comparerFn to keep the order
+  keyValueNoOrder = () => null;
 
   ngOnInit(): void {
-    this.groupData();
+    this.sortData();
+    // this.simpleData = this.copyData();
+    // this.groupData();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['groupBy'] && changes['groupBy'].currentValue !== changes['groupBy'].previousValue) {
-      this.groupBy = changes['groupBy'].currentValue;
-      this.groupData();
+    const groupBy = changes['groupBy'];
+    if (groupBy && groupBy.currentValue !== groupBy.previousValue) {
+      this.groupBy = groupBy.currentValue;
+      // this.groupData();
     }
 
-    if (changes['sortBy'] && changes['sortBy'].currentValue !== changes['sortBy'].previousValue) {
-      this.sortBy = changes['sortBy'].currentValue;
+    const sortBy = changes['sortBy'];
+    if (sortBy && sortBy.currentValue !== sortBy.previousValue) {
+      this.sortBy = sortBy.currentValue;
       this.sortData();
     }
   }
@@ -53,63 +76,71 @@ export class DataGridComponent implements OnInit, OnChanges {
   }
 
   sortData(sortBy: DataGridColumn[] = this.sortBy): void {
-    this.sortBy = sortBy;
-    if (!this.sortBy.length) {
-      this.groupData();
-      return;
-    }
-
-    this.loading = true;
-
-    for (const { items } of Object.values(this.groupedData)) {
-      items.sort((a, b) => {
-        for (const { field, sortOrder } of this.sortBy) {
-          const aValue = a[field];
-          const bValue = b[field];
-
-          if (aValue < bValue) return sortOrder === 'ASC' ? -1 : 1;
-          if (aValue > bValue) return sortOrder === 'ASC' ? 1 : -1;
-        }
-
-        return 0;
-      });
-    }
-
-    this.loading = false;
-  }
-
-  groupData(groupBy: RequestGroupBy = this.groupBy): void {
     if (!this.data) return;
 
     this.loading = true;
-    this.groupBy = groupBy;
+    this.sortBy = sortBy;
 
-    let groupedData: GroupedData = {};
-    const groupOption = GROUP_BY_OPTIONS[groupBy];
-
-    for (const item of this.data) {
-      let key = item[groupOption.field];
-      if (groupOption.displayFields && groupOption.displayFields.length) {
-        key = groupOption.displayFields.map(df => (df === 'event_id' ? '#' + item[df] : item[df])).join(' - ');
-      }
-
-      const group = groupedData[key];
-      if (group && group.items) {
-        group.items.push(item);
-      } else {
-        groupedData[key] = {
-          expanded: false,
-          items: [item],
-        };
-      }
+    if (!this.sortBy || !this.sortBy.length || !this.simpleData) {
+      this.simpleData = this.copyData();
+    } else {
+      this.simpleData = this.copyData().sort(this.sort);
     }
 
-    this.groupedData = groupedData;
+    this.groupData();
 
-    if (this.sortBy.length) {
-      this.sortData();
+    this.loading = false;
+  }
+
+  groupData(groupBy: DataGridGroupOption = this.groupBy): void {
+    if (!this.data) return;
+
+    this.loading = true;
+    if (this.groupBy !== groupBy) {
+      this.groupBy = groupBy;
+      this.groupedData = {};
+    }
+
+    if (this.groupBy) {
+      const groupedData: GroupedData<T> = {};
+      for (const item of this.simpleData) {
+        let key = item[groupBy.field];
+        if (groupBy.displayFields && groupBy.displayFields.length) {
+          key = groupBy.displayFields.map(df => (df.includes('id') ? '#' + item[df] : item[df])).join(' - ');
+        }
+
+        const group = groupedData[key];
+        const wasExpanded = this.groupedData && this.groupedData[key] && this.groupedData[key].expanded;
+        if (group && group.items) {
+          group.items.push(item);
+        } else {
+          groupedData[key] = {
+            expanded: wasExpanded,
+            groupedBy: this.groupBy.title,
+            items: [item],
+          };
+        }
+      }
+
+      this.groupedData = groupedData;
     }
 
     this.loading = false;
   }
+
+  private copyData(data: T[] = this.data): T[] {
+    return JSON.parse(JSON.stringify(data));
+  }
+
+  private sort = (a: T, b: T): number => {
+    for (const { field, sortOrder, isDate } of this.sortBy) {
+      const aValue = isDate ? new Date(a[field]) : a[field];
+      const bValue = isDate ? new Date(b[field]) : b[field];
+
+      if (aValue < bValue) return sortOrder === 'ASC' ? -1 : 1;
+      if (aValue > bValue) return sortOrder === 'ASC' ? 1 : -1;
+    }
+
+    return 0;
+  };
 }

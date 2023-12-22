@@ -16,43 +16,20 @@
     <div
       class="dg-group-header-title dg-cell"
       role="cell">
+      <fa-icon [icon]="faLayerGroup"></fa-icon>
+      <span>
+        <b>{{ groupData.groupedBy }}:</b>
+      </span>
       <span>{{ groupTitle }}</span>
       <span class="dg-group-header-rows-count">{{ groupData.items.length }}</span>
     </div>
   </div>
 
   <ng-container *ngIf="groupData.expanded">
-    <div
+    <app-data-grid-row
       *ngFor="let data of groupData.items"
-      class="dg-row"
-      role="row">
-      <div
-        class="dg-row-indentation dg-row-actions"
-        role="cell">
-        <button
-          mat-button
-          matTooltip="Confirm"
-          class="text-success">
-          <fa-icon [icon]="faCheck"></fa-icon>
-        </button>
-
-        <button
-          mat-button
-          matTooltip="Reject"
-          class="text-danger">
-          <fa-icon [icon]="faXmark"></fa-icon>
-        </button>
-      </div>
-
-      <div class="dg-display-container">
-        <div
-          *ngFor="let column of columns"
-          class="dg-cell no-border"
-          [style.width.px]="column.width"
-          role="cell">
-          {{ data[column.displayField || column.field] }}
-        </div>
-      </div>
-    </div>
+      [rowData]="data"
+      [rowActions]="rowActions"
+      [columns]="columns"></app-data-grid-row>
   </ng-container>
 </div>

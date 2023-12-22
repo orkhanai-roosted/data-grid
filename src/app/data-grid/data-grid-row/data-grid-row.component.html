@@ -1,0 +1,23 @@
+<div
+  class="dg-row"
+  role="row">
+  <div
+    class="dg-row-indentation"
+    [class.dg-row-actions]="rowActions && rowActions.length"
+    role="cell">
+    <app-data-grid-row-action
+      *ngFor="let rowAction of rowActions"
+      [action]="rowAction"
+      [rowData]="rowData"></app-data-grid-row-action>
+  </div>
+
+  <div class="dg-display-container">
+    <div
+      *ngFor="let column of columns"
+      class="dg-cell no-border"
+      [style.width.px]="column.width"
+      role="cell">
+      {{ rowData[column.displayField || column.field] }}
+    </div>
+  </div>
+</div>

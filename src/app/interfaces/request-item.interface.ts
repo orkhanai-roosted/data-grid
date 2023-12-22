@@ -5,7 +5,7 @@ export interface RequestItem {
   event_id: number;
   event_name: string;
   shift_date_display: string;
-  shift_date: Date;
+  shift_date: string;
   location_id: number;
   location: string;
   skillset: string;

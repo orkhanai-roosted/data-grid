@@ -1,4 +1,5 @@
 <mat-form-field
+  class="dg-group-by-select"
   appearance="outline"
   subscriptSizing="dynamic">
   <mat-label>Group By:</mat-label>
@@ -6,11 +7,18 @@
     [value]="groupBy"
     (selectionChange)="groupDataBy($event)">
     <mat-option
-      *ngFor="let groupOption of groupOptions | keyvalue"
-      [value]="groupOption.key">
-      {{ groupOption.value.title }}
+      *ngFor="let groupOption of groupOptions"
+      [value]="groupOption">
+      {{ groupOption.title }}
     </mat-option>
   </mat-select>
+  <button
+    *ngIf="groupBy"
+    mat-icon-button
+    matSuffix
+    (click)="clearGroupBy($event)">
+    <fa-icon [icon]="faXMark"></fa-icon>
+  </button>
 </mat-form-field>
 
 <div class="dg-sort-list">
@@ -18,7 +26,7 @@
     <div
       *ngFor="let sortCol of sortBy; let i = index"
       class="dg-sort-item"
-      (click)="toggleSortingDirection(i)">
+      (click)="toggleSortingDirection(sortCol)">
       <span>{{ sortCol.title }}</span>
 
       <div class="dg-sort-indicator">
@@ -30,6 +38,17 @@
         (click)="removeSorting(i, sortCol)">
         <fa-icon [icon]="faXMark"></fa-icon>
       </div>
+    </div>
+
+    <div
+      *ngIf="sortBy && sortBy.length"
+      class="dg-sort-remove"
+      matTooltip="Clear all"
+      matTooltipPosition="right"
+      (click)="clearSorting()">
+      <fa-icon
+        [icon]="faXMark"
+        size="lg"></fa-icon>
     </div>
   </ng-container>
 

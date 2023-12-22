@@ -1,0 +1,12 @@
+<button
+  *ngIf="action"
+  mat-button
+  [matTooltip]="action.tooltip"
+  [style.color]="action.textColor"
+  [style.backgroundColor]="action.bgColor"
+  (click)="action.callback(rowData)"
+  role="button">
+  <fa-icon
+    [icon]="action.faIcon"
+    [style.color]="action.iconColor"></fa-icon>
+</button>

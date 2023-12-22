@@ -3,8 +3,8 @@ import { MatSelectChange } from '@angular/material/select';
 import { faArrowDown, faArrowUp, faQuestionCircle, faXmark } from '@fortawesome/pro-regular-svg-icons';
 
 import { GROUP_BY_OPTIONS } from '../../data/group-by-options';
-import { RequestGroupBy } from '../../enums/request-group-by.enum';
-import { DataGridColumn } from '../../interfaces/data-grid.interface';
+import { DataGridColumn } from '../../types/data-grid-column.type';
+import { DataGridGroupOption } from '../../types/data-grid-group-option.type';
 
 @Component({
   selector: 'app-data-grid-controls',
@@ -22,23 +22,37 @@ export class DataGridControlsComponent {
   @Input() sortBy: DataGridColumn[];
   @Output() sortUpdated = new EventEmitter<DataGridColumn[]>();
 
-  @Input() groupBy: RequestGroupBy;
-  @Output() groupBySelected = new EventEmitter<RequestGroupBy>();
+  @Input() groupBy: DataGridGroupOption;
+  @Output() groupBySelected = new EventEmitter<DataGridGroupOption>();
 
-  groupDataBy(selection: MatSelectChange) {
+  groupDataBy(selection: MatSelectChange): void {
     this.groupBySelected.emit(selection.value);
   }
 
-  toggleSortingDirection(index: number): void {
-    const sortCol = this.sortBy[index];
-    sortCol.sortOrder = sortCol.sortOrder === 'ASC' ? 'DESC' : 'ASC';
+  clearGroupBy(event: MouseEvent): void {
+    event.stopPropagation();
+    this.groupBySelected.emit(null);
+  }
+
+  toggleSortingDirection(column: DataGridColumn): void {
+    column.sortOrder = column.sortOrder === 'ASC' ? 'DESC' : 'ASC';
 
     this.sortUpdated.emit(this.sortBy);
   }
 
   removeSorting(index: number, column: DataGridColumn): void {
     column.sortOrder = null;
+
     this.sortBy.splice(index, 1);
+    this.sortUpdated.emit(this.sortBy);
+  }
+
+  clearSorting(): void {
+    for (const sortColumn of this.sortBy) {
+      sortColumn.sortOrder = null;
+    }
+
+    this.sortBy = [];
     this.sortUpdated.emit(this.sortBy);
   }
 }

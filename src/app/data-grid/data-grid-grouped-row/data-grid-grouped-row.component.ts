@@ -1,22 +1,25 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { faAngleRight, faCheck, faXmark } from '@fortawesome/pro-regular-svg-icons';
+import { faAngleRight, faCheck, faLayerGroup, faXmark } from '@fortawesome/pro-regular-svg-icons';
 
-import { DataGridColumn } from '../../interfaces/data-grid.interface';
-import { RequestItem } from '../../interfaces/request-item.interface';
+import { DataGridColumn } from '../../types/data-grid-column.type';
+import { DataGridGroup } from '../../types/data-grid-group.type';
+import { DataGridRowAction } from '../../types/data-grid-row-action.type';
 
 @Component({
   selector: 'app-data-grid-grouped-row',
   templateUrl: './data-grid-grouped-row.component.html',
   styleUrl: './data-grid-grouped-row.component.scss',
 })
-export class DataGridGroupedRowComponent implements OnChanges {
+export class DataGridGroupedRowComponent<T> implements OnChanges {
   faAngleRight = faAngleRight;
   faCheck = faCheck;
   faXmark = faXmark;
+  faLayerGroup = faLayerGroup;
 
   @Input() groupTitle: string;
-  @Input() groupData: { expanded: boolean; items: RequestItem[] };
+  @Input() groupData: DataGridGroup<T>;
   @Input() columns: DataGridColumn[];
+  @Input() rowActions: DataGridRowAction<T>[];
   @Input() sticky: boolean;
   @Input() allRowsExpanded: boolean;
 
@@ -26,7 +29,7 @@ export class DataGridGroupedRowComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     const allRowsExpandedChange = changes['allRowsExpanded'];
-    if (allRowsExpandedChange) {
+    if (allRowsExpandedChange && !changes['groupTitle']) {
       this.groupData.expanded = allRowsExpandedChange.currentValue;
     }
   }

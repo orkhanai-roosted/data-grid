@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { faArrowsFromLine, faArrowsToLine, faArrowUpArrowDown } from '@fortawesome/pro-regular-svg-icons';
 
-import { DataGridColumn } from '../../interfaces/data-grid.interface';
+import { DataGridColumn } from '../../types/data-grid-column.type';
 
 @Component({
   selector: 'app-data-grid-header-row',
@@ -14,6 +14,7 @@ export class DataGridHeaderRowComponent {
   faArrowUpArrowDown = faArrowUpArrowDown;
 
   @Input() columns: DataGridColumn[];
+  @Input() groupingActive: boolean;
   @Input() allRowsExpanded: boolean;
   @Output() toggledAllRows = new EventEmitter<void>();
 

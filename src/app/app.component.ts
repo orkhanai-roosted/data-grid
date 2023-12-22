@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+
 import { COLUMNS } from './data/columns';
 import { REQUESTS } from './data/requests';
+import { ROW_ACTIONS } from './data/row-actions';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +12,5 @@ import { REQUESTS } from './data/requests';
 export class AppComponent {
   columns = COLUMNS;
   data = REQUESTS;
+  rowActions = ROW_ACTIONS;
 }
