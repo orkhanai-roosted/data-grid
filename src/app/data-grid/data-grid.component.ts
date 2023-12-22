@@ -1,12 +1,11 @@
-import { KeyValuePipe } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
 import { DataGridColumn } from '../types/data-grid-column.type';
 import { DataGridGroupOption } from '../types/data-grid-group-option.type';
-import { DataGridRowAction } from '../types/data-grid-row-action.type';
 import { DataGridGroup } from '../types/data-grid-group.type';
+import { DataGridRowAction } from '../types/data-grid-row-action.type';
 
 type GroupedData<T> = Record<string, DataGridGroup<T>>;
 
@@ -45,15 +44,13 @@ export class DataGridComponent<T> implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.sortData();
-    // this.simpleData = this.copyData();
-    // this.groupData();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     const groupBy = changes['groupBy'];
     if (groupBy && groupBy.currentValue !== groupBy.previousValue) {
       this.groupBy = groupBy.currentValue;
-      // this.groupData();
+      this.groupData();
     }
 
     const sortBy = changes['sortBy'];
