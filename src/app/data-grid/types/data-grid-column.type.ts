@@ -3,7 +3,12 @@ export type DataGridColumn = {
   field: string;
   displayField?: string;
   width: number;
+  isDate?: boolean;
+
   sortable: boolean;
   sortOrder?: 'ASC' | 'DESC';
-  isDate?: boolean;
+
+  groupable: boolean;
+  groupField?: string;
+  groupKeyFields?: string[];
 };

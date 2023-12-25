@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+
 import { DataGridRowAction } from '../types/data-grid-row-action.type';
 
 @Component({

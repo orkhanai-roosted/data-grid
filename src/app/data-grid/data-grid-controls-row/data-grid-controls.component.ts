@@ -2,9 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { faArrowDown, faArrowUp, faXmark } from '@fortawesome/pro-regular-svg-icons';
 
-import { GROUP_BY_OPTIONS } from '../../data/group-by-options';
 import { DataGridColumn } from '../types/data-grid-column.type';
-import { DataGridGroupOption } from '../types/data-grid-group-option.type';
 
 @Component({
   selector: 'app-data-grid-controls',
@@ -16,13 +14,12 @@ export class DataGridControlsComponent implements OnInit {
   faArrowUp = faArrowUp;
   faArrowDown = faArrowDown;
 
-  groupOptions = GROUP_BY_OPTIONS;
-
   @Input() sortBy: DataGridColumn[];
   @Output() sortUpdated = new EventEmitter<DataGridColumn[]>();
 
-  @Input() groupBy: DataGridGroupOption;
-  @Output() groupBySelected = new EventEmitter<DataGridGroupOption>();
+  @Input() groupByOptions: DataGridColumn[];
+  @Input() groupBy: DataGridColumn;
+  @Output() groupBySelected = new EventEmitter<DataGridColumn>();
 
   ngOnInit(): void {
     // Set default sort order

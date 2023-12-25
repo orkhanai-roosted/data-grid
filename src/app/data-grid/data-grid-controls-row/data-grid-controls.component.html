@@ -7,7 +7,7 @@
     [value]="groupBy"
     (selectionChange)="groupDataBy($event)">
     <mat-option
-      *ngFor="let groupOption of groupOptions"
+      *ngFor="let groupOption of groupByOptions"
       [value]="groupOption">
       {{ groupOption.title }}
     </mat-option>
