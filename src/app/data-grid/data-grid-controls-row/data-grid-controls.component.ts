@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
-import { faArrowDown, faArrowUp, faQuestionCircle, faXmark } from '@fortawesome/pro-regular-svg-icons';
+import { faArrowDown, faArrowUp, faXmark } from '@fortawesome/pro-regular-svg-icons';
 
 import { GROUP_BY_OPTIONS } from '../../data/group-by-options';
 import { DataGridColumn } from '../../types/data-grid-column.type';
@@ -11,11 +11,10 @@ import { DataGridGroupOption } from '../../types/data-grid-group-option.type';
   templateUrl: './data-grid-controls.component.html',
   styleUrl: './data-grid-controls.component.scss',
 })
-export class DataGridControlsComponent {
+export class DataGridControlsComponent implements OnInit {
   faXMark = faXmark;
   faArrowUp = faArrowUp;
   faArrowDown = faArrowDown;
-  faQuestionCircle = faQuestionCircle;
 
   groupOptions = GROUP_BY_OPTIONS;
 
@@ -24,6 +23,13 @@ export class DataGridControlsComponent {
 
   @Input() groupBy: DataGridGroupOption;
   @Output() groupBySelected = new EventEmitter<DataGridGroupOption>();
+
+  ngOnInit(): void {
+    // Set default sort order
+    for (const sortCol of this.sortBy) {
+      sortCol.sortOrder = sortCol.sortOrder || 'DESC';
+    }
+  }
 
   groupDataBy(selection: MatSelectChange): void {
     this.groupBySelected.emit(selection.value);

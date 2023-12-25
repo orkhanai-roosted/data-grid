@@ -1,13 +1,11 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
 import { DataGridColumn } from '../types/data-grid-column.type';
 import { DataGridGroupOption } from '../types/data-grid-group-option.type';
-import { DataGridGroup } from '../types/data-grid-group.type';
+import { DataGridGroupedData } from '../types/data-grid-grouped-data.type';
 import { DataGridRowAction } from '../types/data-grid-row-action.type';
-
-type GroupedData<T> = Record<string, DataGridGroup<T>>;
 
 @Component({
   selector: 'app-data-grid',
@@ -15,7 +13,7 @@ type GroupedData<T> = Record<string, DataGridGroup<T>>;
   styleUrl: './data-grid.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class DataGridComponent<T> implements OnInit, OnChanges {
+export class DataGridComponent<T> implements OnInit {
   @Input() data: T[];
   @Input() columns: DataGridColumn[];
   @Input() sortBy: DataGridColumn[] = [];
@@ -37,27 +35,13 @@ export class DataGridComponent<T> implements OnInit, OnChanges {
     return this.simpleDataSubject.value;
   }
 
-  groupedData: GroupedData<T> = {};
+  groupedData: DataGridGroupedData<T> = {};
 
   // KeyValuePipe comparerFn to keep the order
   keyValueNoOrder = () => null;
 
   ngOnInit(): void {
     this.sortData();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    const groupBy = changes['groupBy'];
-    if (groupBy && groupBy.currentValue !== groupBy.previousValue) {
-      this.groupBy = groupBy.currentValue;
-      this.groupData();
-    }
-
-    const sortBy = changes['sortBy'];
-    if (sortBy && sortBy.currentValue !== sortBy.previousValue) {
-      this.sortBy = sortBy.currentValue;
-      this.sortData();
-    }
   }
 
   toggleAllRows(): void {
@@ -99,7 +83,7 @@ export class DataGridComponent<T> implements OnInit, OnChanges {
     }
 
     if (this.groupBy) {
-      const groupedData: GroupedData<T> = {};
+      const groupedData: DataGridGroupedData<T> = {};
       for (const item of this.simpleData) {
         let key = item[groupBy.field];
         if (groupBy.displayFields && groupBy.displayFields.length) {
