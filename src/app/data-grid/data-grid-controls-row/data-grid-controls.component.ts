@@ -3,8 +3,8 @@ import { MatSelectChange } from '@angular/material/select';
 import { faArrowDown, faArrowUp, faXmark } from '@fortawesome/pro-regular-svg-icons';
 
 import { GROUP_BY_OPTIONS } from '../../data/group-by-options';
-import { DataGridColumn } from '../../types/data-grid-column.type';
-import { DataGridGroupOption } from '../../types/data-grid-group-option.type';
+import { DataGridColumn } from '../types/data-grid-column.type';
+import { DataGridGroupOption } from '../types/data-grid-group-option.type';
 
 @Component({
   selector: 'app-data-grid-controls',

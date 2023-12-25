@@ -2,10 +2,10 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { DataGridColumn } from '../types/data-grid-column.type';
-import { DataGridGroupOption } from '../types/data-grid-group-option.type';
-import { DataGridGroupedData } from '../types/data-grid-grouped-data.type';
-import { DataGridRowAction } from '../types/data-grid-row-action.type';
+import { DataGridColumn } from './types/data-grid-column.type';
+import { DataGridGroupOption } from './types/data-grid-group-option.type';
+import { DataGridGroupedData } from './types/data-grid-grouped-data.type';
+import { DataGridRowAction } from './types/data-grid-row-action.type';
 
 @Component({
   selector: 'app-data-grid',

@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { faAngleRight, faCheck, faLayerGroup, faXmark } from '@fortawesome/pro-regular-svg-icons';
 
-import { DataGridColumn } from '../../types/data-grid-column.type';
-import { DataGridGroup } from '../../types/data-grid-group.type';
-import { DataGridRowAction } from '../../types/data-grid-row-action.type';
+import { DataGridColumn } from '../types/data-grid-column.type';
+import { DataGridGroup } from '../types/data-grid-group.type';
+import { DataGridRowAction } from '../types/data-grid-row-action.type';
 
 @Component({
   selector: 'app-data-grid-grouped-row',

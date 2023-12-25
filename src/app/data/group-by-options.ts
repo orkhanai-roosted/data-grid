@@ -1,4 +1,4 @@
-import { DataGridGroupOption } from '../types/data-grid-group-option.type';
+import { DataGridGroupOption } from '../data-grid/types/data-grid-group-option.type';
 
 export const GROUP_BY_OPTIONS: DataGridGroupOption[] = [
   {

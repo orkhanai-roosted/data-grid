@@ -1,4 +1,4 @@
-import { DataGridColumn } from '../types/data-grid-column.type';
+import { DataGridColumn } from '../data-grid/types/data-grid-column.type';
 
 export const COLUMNS: DataGridColumn[] = [
   {

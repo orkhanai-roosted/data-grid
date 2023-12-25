@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { faArrowsFromLine, faArrowsToLine, faArrowUpArrowDown } from '@fortawesome/pro-regular-svg-icons';
 
-import { DataGridColumn } from '../../types/data-grid-column.type';
+import { DataGridColumn } from '../types/data-grid-column.type';
 
 @Component({
   selector: 'app-data-grid-header-row',

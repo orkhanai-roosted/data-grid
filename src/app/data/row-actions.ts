@@ -1,6 +1,6 @@
 import { faCheck, faXmark } from '@fortawesome/pro-regular-svg-icons';
 import { RequestItem } from '../interfaces/request-item.interface';
-import { DataGridRowAction } from '../types/data-grid-row-action.type';
+import { DataGridRowAction } from '../data-grid/types/data-grid-row-action.type';
 
 export const ROW_ACTIONS: DataGridRowAction<RequestItem>[] = [
   {

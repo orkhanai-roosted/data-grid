@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { faCheck, faXmark } from '@fortawesome/pro-regular-svg-icons';
 
-import { DataGridColumn } from '../../types/data-grid-column.type';
-import { DataGridRowAction } from '../../types/data-grid-row-action.type';
+import { DataGridColumn } from '../types/data-grid-column.type';
+import { DataGridRowAction } from '../types/data-grid-row-action.type';
 
 @Component({
   selector: 'app-data-grid-row',
