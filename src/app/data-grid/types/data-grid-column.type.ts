@@ -5,6 +5,9 @@ export type DataGridColumn = {
   width: number;
   isDate?: boolean;
 
+  prefix?: string;
+  suffix?: string;
+
   sortable: boolean;
   sortOrder?: 'ASC' | 'DESC';
 

@@ -6,6 +6,7 @@
     role="row">
     <div
       class="dg-row-indentation dg-cell"
+      [class.hoverable]="groupingActive"
       role="cell"
       (click)="groupingActive ? toggleAllRows() : null">
       <fa-icon

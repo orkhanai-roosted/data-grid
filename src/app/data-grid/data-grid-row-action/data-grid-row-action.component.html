@@ -1,12 +1,18 @@
 <button
-  *ngIf="action"
+  *ngIf="action && (action.displayCondition ? action.displayCondition(rowData) : true)"
   mat-button
   [matTooltip]="action.tooltip"
   [style.color]="action.textColor"
   [style.backgroundColor]="action.bgColor"
-  (click)="action.callback(rowData)"
+  (click)="action.callback ? action.callback(rowData) : null"
   role="button">
   <fa-icon
     [icon]="action.faIcon"
     [style.color]="action.iconColor"></fa-icon>
 </button>
+
+<!-- Swal does not have angular 17 support yet -->
+<!-- [swal]="action.swal"
+(confirm)="action.swal?.confirm ? action.swal.confirm(rowData) : null"
+(deny)="action.swal?.deny ? action.swal.deny(rowData) : null"
+(dismiss)="action.swal?.dismiss ? action.swal.dismiss(rowData) : null" -->

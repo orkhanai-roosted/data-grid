@@ -3,7 +3,7 @@
   role="row">
   <div
     class="dg-row-indentation"
-    [class.dg-row-actions]="rowActions && rowActions.length"
+    [class.dg-row-actions.hoverable]="rowActions && rowActions.length"
     role="cell">
     <app-data-grid-row-action
       *ngFor="let rowAction of rowActions"
@@ -17,7 +17,7 @@
       class="dg-cell no-border"
       [style.width.px]="column.width"
       role="cell">
-      {{ rowData[column.displayField || column.field] }}
+      {{ column.prefix }}{{ rowData[column.displayField || column.field] }}{{ column.suffix }}
     </div>
   </div>
 </div>
