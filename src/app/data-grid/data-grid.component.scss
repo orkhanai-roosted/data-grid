@@ -12,6 +12,7 @@
 
   --dg-indentation-width: 200px;
   --dg-cell-height: 50px;
+  --dg-border-width: 1px;
 }
 
 .dg-wrapper {
@@ -50,7 +51,7 @@
 
 .dg-row {
   display: flex;
-  border-bottom: 1px solid var(--dg-border-color);
+  border-bottom: var(--dg-border-width) solid var(--dg-border-color);
 }
 
 .dg-row-indentation {
@@ -59,10 +60,10 @@
   flex: 0 0 var(--dg-indentation-width);
   min-width: var(--dg-indentation-width);
   background-color: #fff;
-  border-right: 1px solid var(--dg-border-color);
+  border-right: var(--dg-border-width) solid var(--dg-border-color);
   text-align: center;
 
-  &:not(:empty, .dg-row-actions) {
+  &.hoverable {
     background-color: var(--dg-cell-bg);
     cursor: pointer;
 
@@ -106,6 +107,6 @@
   text-overflow: ellipsis;
 
   &:not(:last-child, .no-border) {
-    border-right: 1px solid var(--dg-border-color);
+    border-right: var(--dg-border-width) solid var(--dg-border-color);
   }
 }

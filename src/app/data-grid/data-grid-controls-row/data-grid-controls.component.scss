@@ -3,7 +3,7 @@
   flex-wrap: wrap;
   padding: 1rem;
   gap: 1rem;
-  border-bottom: 1px solid var(--dg-border-color);
+  border-bottom: var(--dg-border-width) solid var(--dg-border-color);
 }
 
 .dg-group-by-select {
@@ -16,7 +16,7 @@
   gap: 0.5rem;
   flex-wrap: wrap;
   padding-left: 1rem;
-  border-left: 1px solid var(--dg-border-color);
+  border-left: var(--dg-border-width) solid var(--dg-border-color);
   align-items: center;
 
   &-no-sort {

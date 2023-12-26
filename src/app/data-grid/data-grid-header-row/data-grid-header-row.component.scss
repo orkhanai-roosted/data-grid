@@ -16,6 +16,8 @@
 
 .dg-column-header {
   grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  line-height: 1.2;
 
   &.sortable {
     cursor: pointer;
