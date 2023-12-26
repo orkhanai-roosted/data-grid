@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { faAngleRight, faCheck, faLayerGroup, faXmark } from '@fortawesome/pro-regular-svg-icons';
+import { faAngleRight, faLayerGroup } from '@fortawesome/pro-regular-svg-icons';
 
 import { DataGridColumn } from '../types/data-grid-column.type';
 import { DataGridGroup } from '../types/data-grid-group.type';
@@ -12,8 +12,6 @@ import { DataGridRowAction } from '../types/data-grid-row-action.type';
 })
 export class DataGridGroupedRowComponent<T> implements OnChanges {
   faAngleRight = faAngleRight;
-  faCheck = faCheck;
-  faXmark = faXmark;
   faLayerGroup = faLayerGroup;
 
   @Input() groupTitle: string;
