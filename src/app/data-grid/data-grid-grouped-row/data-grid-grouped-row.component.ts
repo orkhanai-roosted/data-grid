@@ -16,7 +16,7 @@ export class DataGridGroupedRowComponent<T> implements OnChanges {
 
   @Input() groupTitle: string;
   @Input() groupData: DataGridGroup<T>;
-  @Input() columns: DataGridColumn[];
+  @Input() columns: DataGridColumn<T>[];
   @Input() rowActions: DataGridRowAction<T>[];
   @Input() sticky: boolean;
   @Input() allRowsExpanded: boolean;

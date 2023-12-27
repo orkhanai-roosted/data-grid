@@ -1,4 +1,4 @@
-export type DataGridColumn = {
+export type DataGridColumn<T> = {
   title: string;
   field: string;
   displayField?: string;
@@ -7,6 +7,9 @@ export type DataGridColumn = {
 
   prefix?: string;
   suffix?: string;
+
+  tooltip?: string;
+  tooltipFn?: (rowData: T) => string;
 
   sortable: boolean;
   sortOrder?: 'ASC' | 'DESC';

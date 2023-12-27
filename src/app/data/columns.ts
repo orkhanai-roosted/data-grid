@@ -1,6 +1,7 @@
 import { DataGridColumn } from '../data-grid/types/data-grid-column.type';
+import { RequestItem } from '../interfaces/request-item.interface';
 
-export const COLUMNS: DataGridColumn[] = [
+export const COLUMNS: DataGridColumn<RequestItem>[] = [
   {
     title: 'Worker Name',
     field: 'worker_name',

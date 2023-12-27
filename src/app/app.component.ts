@@ -11,6 +11,7 @@ import { ROW_ACTIONS } from './data/row-actions';
 })
 export class AppComponent {
   columns = COLUMNS;
-  data = REQUESTS;
+  // data = REQUESTS;
+  data = [];
   rowActions = ROW_ACTIONS;
 }

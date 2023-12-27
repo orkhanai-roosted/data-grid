@@ -9,7 +9,9 @@
   <div
     class="dg-content"
     cdkVirtualScrollingElement>
-    <div class="dg-rows">
+    <div
+      class="dg-rows"
+      [style.height]="data && data.length ? '100%' : 'auto'">
       <app-data-grid-header-row
         [columns]="columns"
         [allRowsExpanded]="allRowsExpanded"
@@ -37,6 +39,12 @@
             [rowActions]="rowActions"></app-data-grid-row>
         </cdk-virtual-scroll-viewport>
       </ng-container>
+    </div>
+
+    <div
+      *ngIf="(!data || !data.length) && !loading"
+      class="dg-no-data-text">
+      {{ noDataText }}
     </div>
 
     <div

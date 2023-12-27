@@ -9,17 +9,17 @@ import { DataGridColumn } from '../types/data-grid-column.type';
   templateUrl: './data-grid-controls.component.html',
   styleUrl: './data-grid-controls.component.scss',
 })
-export class DataGridControlsComponent implements OnInit {
+export class DataGridControlsComponent<T> implements OnInit {
   faXMark = faXmark;
   faArrowUp = faArrowUp;
   faArrowDown = faArrowDown;
 
-  @Input() sortBy: DataGridColumn[];
-  @Output() sortUpdated = new EventEmitter<DataGridColumn[]>();
+  @Input() sortBy: DataGridColumn<T>[];
+  @Output() sortUpdated = new EventEmitter<DataGridColumn<T>[]>();
 
-  @Input() groupByOptions: DataGridColumn[];
-  @Input() groupBy: DataGridColumn;
-  @Output() groupBySelected = new EventEmitter<DataGridColumn>();
+  @Input() groupByOptions: DataGridColumn<T>[];
+  @Input() groupBy: DataGridColumn<T>;
+  @Output() groupBySelected = new EventEmitter<DataGridColumn<T>>();
 
   ngOnInit(): void {
     // Set default sort order
@@ -37,13 +37,13 @@ export class DataGridControlsComponent implements OnInit {
     this.groupBySelected.emit(null);
   }
 
-  toggleSortingDirection(column: DataGridColumn): void {
+  toggleSortingDirection(column: DataGridColumn<T>): void {
     column.sortOrder = column.sortOrder === 'ASC' ? 'DESC' : 'ASC';
 
     this.sortUpdated.emit(this.sortBy);
   }
 
-  removeSorting(index: number, column: DataGridColumn): void {
+  removeSorting(index: number, column: DataGridColumn<T>): void {
     column.sortOrder = null;
 
     this.sortBy.splice(index, 1);

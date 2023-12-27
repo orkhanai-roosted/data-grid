@@ -11,5 +11,5 @@ import { DataGridRowAction } from '../types/data-grid-row-action.type';
 export class DataGridRowComponent<T> {
   @Input() rowData: T;
   @Input() rowActions: DataGridRowAction<T>[];
-  @Input() columns: DataGridColumn[];
+  @Input() columns: DataGridColumn<T>[];
 }

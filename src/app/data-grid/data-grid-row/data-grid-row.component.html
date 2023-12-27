@@ -16,6 +16,7 @@
       *ngFor="let column of columns"
       class="dg-cell no-border"
       [style.width.px]="column.width"
+      [matTooltip]="column.tooltip ? column.tooltip : column.tooltipFn ? column.tooltipFn(rowData) : null"
       role="cell">
       {{ column.prefix }}{{ rowData[column.displayField || column.field] }}{{ column.suffix }}
     </div>

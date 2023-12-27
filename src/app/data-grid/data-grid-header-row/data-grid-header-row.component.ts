@@ -8,23 +8,23 @@ import { DataGridColumn } from '../types/data-grid-column.type';
   templateUrl: './data-grid-header-row.component.html',
   styleUrl: './data-grid-header-row.component.scss',
 })
-export class DataGridHeaderRowComponent {
+export class DataGridHeaderRowComponent<T> {
   faArrowsFromLine = faArrowsFromLine;
   faArrowsToLine = faArrowsToLine;
   faArrowUpArrowDown = faArrowUpArrowDown;
 
-  @Input() columns: DataGridColumn[];
+  @Input() columns: DataGridColumn<T>[];
   @Input() groupingActive: boolean;
   @Input() allRowsExpanded: boolean;
   @Output() toggledAllRows = new EventEmitter<void>();
 
-  @Output() sortColumnAdded = new EventEmitter<DataGridColumn>();
+  @Output() sortColumnAdded = new EventEmitter<DataGridColumn<T>>();
 
   toggleAllRows(): void {
     this.toggledAllRows.emit();
   }
 
-  addSorting(column: DataGridColumn): void {
+  addSorting(column: DataGridColumn<T>): void {
     this.sortColumnAdded.next(column);
   }
 }

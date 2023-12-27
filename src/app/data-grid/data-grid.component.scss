@@ -110,3 +110,10 @@
     border-right: var(--dg-border-width) solid var(--dg-border-color);
   }
 }
+
+.dg-no-data-text {
+  position: sticky;
+  left: 0;
+  line-height: var(--dg-cell-height);
+  text-align: center;
+}

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
@@ -12,16 +12,17 @@ import { DataGridRowAction } from './types/data-grid-row-action.type';
   styleUrl: './data-grid.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class DataGridComponent<T> implements OnInit {
+export class DataGridComponent<T> implements OnInit, OnChanges {
   @Input() data: T[];
-  @Input() columns: DataGridColumn[];
-  @Input() sortBy: DataGridColumn[] = [];
-  @Input() groupBy: DataGridColumn;
+  @Input() columns: DataGridColumn<T>[];
+  @Input() sortBy: DataGridColumn<T>[] = [];
+  @Input() groupBy: DataGridColumn<T>;
   @Input() stickyGroupRows = false;
   @Input() rowActions: DataGridRowAction<T>[];
+  @Input() loading = false;
+  @Input() noDataText = 'There is no data to display';
 
   allRowsExpanded = false;
-  loading = false;
 
   // Using subject & observable for virtual scroll cdk
   simpleDataSubject = new BehaviorSubject<T[]>([]);
@@ -34,22 +35,38 @@ export class DataGridComponent<T> implements OnInit {
     return this.simpleDataSubject.value;
   }
 
-  groupByOptions: DataGridColumn[] = [];
+  groupByOptions: DataGridColumn<T>[] = [];
   groupedData: DataGridGroupedData<T> = {};
 
   // KeyValuePipe comparerFn to keep the order
   keyValueNoOrder = () => null;
 
   ngOnInit(): void {
-    this.groupByOptions = this.columns.filter(col => col.groupable);
+    this.initGroupByOptions();
     this.sortData();
+  }
+
+  ngOnChanges(simpleChanges: SimpleChanges): void {
+    const changedData = simpleChanges['data'];
+    if (changedData && changedData.currentValue !== changedData.previousValue) {
+      this.sortData();
+    }
+
+    const changedColumns = simpleChanges['columns'];
+    if (changedColumns && changedColumns.currentValue !== changedColumns.previousValue) {
+      this.initGroupByOptions();
+    }
+  }
+
+  initGroupByOptions(): void {
+    this.groupByOptions = this.columns.filter(col => col.groupable);
   }
 
   toggleAllRows(): void {
     this.allRowsExpanded = !this.allRowsExpanded;
   }
 
-  addSortColumn(column: DataGridColumn): void {
+  addSortColumn(column: DataGridColumn<T>): void {
     column.sortOrder = column.sortOrder === 'DESC' ? 'ASC' : 'DESC';
     if (!this.sortBy.includes(column)) {
       this.sortBy.push(column);
@@ -57,7 +74,7 @@ export class DataGridComponent<T> implements OnInit {
     this.sortData();
   }
 
-  sortData(sortBy: DataGridColumn[] = this.sortBy): void {
+  sortData(sortBy: DataGridColumn<T>[] = this.sortBy): void {
     if (!this.data) return;
 
     this.loading = true;
@@ -71,7 +88,7 @@ export class DataGridComponent<T> implements OnInit {
        * so the order of the groups are not changed
        * until that sort direction is changed
        */
-      let groupSortBy: DataGridColumn[];
+      let groupSortBy: DataGridColumn<T>[];
       if (this.groupBy) {
         const groupKeySortBy = this.sortBy.find(sortCol => sortCol.field === this.groupBy.field);
         groupSortBy = [groupKeySortBy, ...this.sortBy.slice()];
@@ -86,7 +103,7 @@ export class DataGridComponent<T> implements OnInit {
     this.loading = false;
   }
 
-  groupData(groupBy: DataGridColumn = this.groupBy): void {
+  groupData(groupBy: DataGridColumn<T> = this.groupBy): void {
     if (!this.data) return;
 
     this.loading = true;
@@ -127,7 +144,7 @@ export class DataGridComponent<T> implements OnInit {
   }
 
   private sort =
-    (sortBy: DataGridColumn[] = this.sortBy) =>
+    (sortBy: DataGridColumn<T>[] = this.sortBy) =>
     (a: T, b: T): number => {
       for (const { field, sortOrder, isDate } of sortBy) {
         const aValue = isDate ? new Date(a[field]) : a[field];
