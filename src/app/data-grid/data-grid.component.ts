@@ -79,6 +79,7 @@ export class DataGridComponent<T> implements OnInit, OnChanges {
 
     this.loading = true;
     this.sortBy = sortBy;
+    let groupSortBy: DataGridColumn<T>[];
 
     if (!this.sortBy || !this.sortBy.length || !this.simpleData) {
       this.simpleData = this.copyData();
@@ -88,17 +89,32 @@ export class DataGridComponent<T> implements OnInit, OnChanges {
        * so the order of the groups are not changed
        * until that sort direction is changed
        */
-      let groupSortBy: DataGridColumn<T>[];
       if (this.groupBy) {
         const groupKeySortBy = this.sortBy.find(sortCol => sortCol.field === this.groupBy.field);
-        groupSortBy = [groupKeySortBy, ...this.sortBy.slice()];
-        groupSortBy.splice(this.sortBy.indexOf(groupKeySortBy) + 1, 1);
+        if (groupKeySortBy) {
+          groupSortBy = [groupKeySortBy, ...this.sortBy.slice()];
+          groupSortBy.splice(this.sortBy.indexOf(groupKeySortBy) + 1, 1);
+        }
       }
 
       this.simpleData = this.copyData().sort(this.sort(groupSortBy));
     }
 
-    this.groupData();
+    if (this.groupBy && this.groupedData && Object.values(this.groupedData).length && !groupSortBy) {
+      this.sortGroupItems();
+    } else {
+      this.groupData();
+    }
+
+    this.loading = false;
+  }
+
+  sortGroupItems(sortBy: DataGridColumn<T>[] = this.sortBy): void {
+    this.loading = true;
+
+    for (const { items } of Object.values(this.groupedData)) {
+      items.sort(this.sort(sortBy));
+    }
 
     this.loading = false;
   }
@@ -126,7 +142,7 @@ export class DataGridComponent<T> implements OnInit, OnChanges {
           group.items.push(item);
         } else {
           groupedData[groupKey] = {
-            expanded: wasExpanded,
+            expanded: wasExpanded || false,
             groupedBy: this.groupBy.title,
             items: [item],
           };
