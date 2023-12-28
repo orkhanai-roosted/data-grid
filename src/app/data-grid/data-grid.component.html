@@ -11,7 +11,7 @@
     cdkVirtualScrollingElement>
     <div
       class="dg-rows"
-      [style.height]="data && data.length ? '100%' : 'auto'">
+      [style.min-height]="data && data.length ? '100%' : 'unset'">
       <app-data-grid-header-row
         [columns]="columns"
         [allRowsExpanded]="allRowsExpanded"
