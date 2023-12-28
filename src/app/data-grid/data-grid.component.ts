@@ -37,6 +37,7 @@ export class DataGridComponent<T> implements OnChanges {
 
   groupByOptions: DataGridColumn<T>[] = [];
   groupedData: DataGridGroupedData<T> = {};
+  groupKeySortBy: DataGridColumn<T> = null;
 
   // KeyValuePipe comparerFn to keep the order
   keyValueNoOrder = () => null;
@@ -83,37 +84,52 @@ export class DataGridComponent<T> implements OnChanges {
       this.simpleData = this.copyData();
       this.groupData();
     } else {
-      /**
-       * Move sort column by which data is grouped to start
-       * so the order of the groups are not changed
-       * until that sort direction is changed
-       */
-      const groupSortBy = this.handleGroupSort();
-
-      this.simpleData = this.copyData().sort(this.sort(groupSortBy));
-      this.handleGrouping(groupSortBy);
+      if (this.groupBy) {
+        this.handleGroupedSorting();
+      } else {
+        this.simpleData = this.copyData().sort(this.sort());
+        this.groupData();
+      }
     }
 
     this.loading = false;
   }
 
-  private handleGroupSort(): DataGridColumn<T>[] | undefined {
-    if (!this.groupBy || this.sortBy.length === 1) return this.sortBy;
+  private handleGroupedSorting(): void {
+    const currentGroupKeySortBy = this.sortBy.find(sortCol => sortCol.field === this.groupBy.field);
+    if (currentGroupKeySortBy) {
+      /**
+       * If data is sorted by grouped column
+       * move that column to start of the sortBy array
+       * so the order of the groups are not changed
+       * until that sort direction is changed
+       */
+      this.groupKeySortBy = currentGroupKeySortBy;
 
-    const groupKeySortBy = this.sortBy.find(sortCol => sortCol.field === this.groupBy.field);
-    if (!groupKeySortBy) return undefined;
+      const groupSortBy = [currentGroupKeySortBy, ...this.sortBy.slice()];
+      groupSortBy.splice(this.sortBy.indexOf(currentGroupKeySortBy) + 1, 1);
+      this.simpleData = this.copyData().sort(this.sort(groupSortBy));
+      this.groupData();
+      return;
+    }
 
-    const groupSortBy = [groupKeySortBy, ...this.sortBy.slice()];
-    groupSortBy.splice(this.sortBy.indexOf(groupKeySortBy) + 1, 1);
-    return groupSortBy;
-  }
-
-  private handleGrouping(groupSortBy: DataGridColumn<T>[] | undefined): void {
-    if (this.groupBy && this.groupedData && Object.values(this.groupedData).length && !groupSortBy) {
-      this.sortGroupItems();
-    } else {
+    if (!currentGroupKeySortBy && this.groupKeySortBy) {
+      /**
+       * Revert groups sorting to initial
+       * as sorting by grouped column is removed
+       */
+      this.groupKeySortBy = null;
+      this.simpleData = this.copyData();
       this.groupData();
     }
+
+    /**
+     * Sort the data in groups
+     * if there is no sorting by grouped column
+     * or it was removed
+     */
+    this.simpleData = this.copyData().sort(this.sort());
+    this.sortGroupItems();
   }
 
   sortGroupItems(sortBy: DataGridColumn<T>[] = this.sortBy): void {
