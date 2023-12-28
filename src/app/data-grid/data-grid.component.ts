@@ -23,6 +23,7 @@ export class DataGridComponent<T> implements OnChanges {
   @Input() noDataText = 'There is no data to display';
 
   allRowsExpanded = false;
+  dataInitialized = false;
 
   // Using subject & observable for virtual scroll cdk
   simpleDataSubject = new BehaviorSubject<T[]>([]);
@@ -57,6 +58,9 @@ export class DataGridComponent<T> implements OnChanges {
   private initData(): void {
     this.allRowsExpanded = false;
     this.sortData();
+    if (!this.dataInitialized) {
+      this.dataInitialized = false;
+    }
   }
 
   private initGroupByOptions(): void {

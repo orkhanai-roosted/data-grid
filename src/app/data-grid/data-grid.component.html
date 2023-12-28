@@ -42,17 +42,17 @@
     </div>
 
     <div
-      *ngIf="(!data || !data.length) && !loading"
+      *ngIf="(!data || !data.length) && !loading && dataInitialized"
       class="dg-no-data-text">
       {{ noDataText }}
     </div>
+  </div>
 
-    <div
-      *ngIf="loading"
-      class="dg-loading-overlay">
-      <mat-spinner
-        diameter="50"
-        strokeWidth="4"></mat-spinner>
-    </div>
+  <div
+    *ngIf="loading || !dataInitialized"
+    class="dg-loading-overlay">
+    <mat-spinner
+      diameter="50"
+      strokeWidth="4"></mat-spinner>
   </div>
 </div>
