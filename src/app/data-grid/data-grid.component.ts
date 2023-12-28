@@ -55,6 +55,7 @@ export class DataGridComponent<T> implements OnChanges {
   }
 
   private initData(): void {
+    this.allRowsExpanded = false;
     this.sortData();
   }
 
