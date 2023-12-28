@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewEncapsulation } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { DataGridRowAction } from './types/data-grid-row-action.type';
   styleUrl: './data-grid.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class DataGridComponent<T> implements OnInit, OnChanges {
+export class DataGridComponent<T> implements OnChanges {
   @Input() data: T[];
   @Input() columns: DataGridColumn<T>[];
   @Input() sortBy: DataGridColumn<T>[] = [];
@@ -41,24 +41,23 @@ export class DataGridComponent<T> implements OnInit, OnChanges {
   // KeyValuePipe comparerFn to keep the order
   keyValueNoOrder = () => null;
 
-  ngOnInit(): void {
-    this.initGroupByOptions();
-    this.sortData();
-  }
-
   ngOnChanges(simpleChanges: SimpleChanges): void {
-    const changedData = simpleChanges['data'];
-    if (changedData && changedData.currentValue !== changedData.previousValue) {
-      this.sortData();
-    }
-
     const changedColumns = simpleChanges['columns'];
     if (changedColumns && changedColumns.currentValue !== changedColumns.previousValue) {
       this.initGroupByOptions();
     }
+
+    const changedData = simpleChanges['data'];
+    if (changedData && changedData.currentValue !== changedData.previousValue) {
+      this.initData();
+    }
   }
 
-  initGroupByOptions(): void {
+  private initData(): void {
+    this.sortData();
+  }
+
+  private initGroupByOptions(): void {
     this.groupByOptions = this.columns.filter(col => col.groupable);
   }
 
@@ -79,34 +78,42 @@ export class DataGridComponent<T> implements OnInit, OnChanges {
 
     this.loading = true;
     this.sortBy = sortBy;
-    let groupSortBy: DataGridColumn<T>[];
 
     if (!this.sortBy || !this.sortBy.length || !this.simpleData) {
       this.simpleData = this.copyData();
+      this.groupData();
     } else {
       /**
        * Move sort column by which data is grouped to start
        * so the order of the groups are not changed
        * until that sort direction is changed
        */
-      if (this.groupBy) {
-        const groupKeySortBy = this.sortBy.find(sortCol => sortCol.field === this.groupBy.field);
-        if (groupKeySortBy) {
-          groupSortBy = [groupKeySortBy, ...this.sortBy.slice()];
-          groupSortBy.splice(this.sortBy.indexOf(groupKeySortBy) + 1, 1);
-        }
-      }
+      const groupSortBy = this.handleGroupSort();
 
       this.simpleData = this.copyData().sort(this.sort(groupSortBy));
+      this.handleGrouping(groupSortBy);
     }
 
+    this.loading = false;
+  }
+
+  private handleGroupSort(): DataGridColumn<T>[] | undefined {
+    if (!this.groupBy || this.sortBy.length === 1) return this.sortBy;
+
+    const groupKeySortBy = this.sortBy.find(sortCol => sortCol.field === this.groupBy.field);
+    if (!groupKeySortBy) return undefined;
+
+    const groupSortBy = [groupKeySortBy, ...this.sortBy.slice()];
+    groupSortBy.splice(this.sortBy.indexOf(groupKeySortBy) + 1, 1);
+    return groupSortBy;
+  }
+
+  private handleGrouping(groupSortBy: DataGridColumn<T>[] | undefined): void {
     if (this.groupBy && this.groupedData && Object.values(this.groupedData).length && !groupSortBy) {
       this.sortGroupItems();
     } else {
       this.groupData();
     }
-
-    this.loading = false;
   }
 
   sortGroupItems(sortBy: DataGridColumn<T>[] = this.sortBy): void {
