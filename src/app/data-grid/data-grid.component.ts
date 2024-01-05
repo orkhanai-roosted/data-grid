@@ -59,7 +59,7 @@ export class DataGridComponent<T> implements OnChanges {
     this.allRowsExpanded = false;
     this.sortData();
     if (!this.dataInitialized) {
-      this.dataInitialized = false;
+      this.dataInitialized = true;
     }
   }
 
